@@ -19,16 +19,18 @@ class WassupForm extends React.Component {
         return h('form', {
             onSubmit: event => {
                 event.preventDefault();
-                let newPost = {
-                    id: generateId(),
-                    userName: this.state.userName,
-                    date: new Date(),
-                    content: this.state.newWassup
+                if (this.state.newWassup !== '' && this.state.userName !== '') {
+                    let newPost = {
+                        id: generateId(),
+                        userName: this.state.userName,
+                        date: new Date(),
+                        content: this.state.newWassup
+                    }
+                    this.props.makeWassup(newPost);
+                    this.setState({
+                        newWassup: ''
+                    })
                 }
-                this.props.makeWassup(newPost);
-                this.setState({
-                    newWassup: ''
-                })
             }
         },
             h('input', { 
@@ -86,7 +88,7 @@ class Homepage extends React.Component {
 
         let makeWassup = newWassup => {
             let newPosts = this.state.posts;
-            newPosts.push(newWassup);
+            newPosts.unshift(newWassup);
             this.setState({
                 posts: newPosts
             })
