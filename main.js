@@ -11,16 +11,17 @@ class WassupForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            newWassup: ''
+            newWassup: '',
+            userName: '',
         }
     }
     render () {
         return h('form', {
-            onSubmit: (event) => {
+            onSubmit: event => {
                 event.preventDefault();
                 let newPost = {
                     id: generateId(),
-                    userName: 'Nat',
+                    userName: this.state.userName,
                     date: new Date(),
                     content: this.state.newWassup
                 }
@@ -34,9 +35,17 @@ class WassupForm extends React.Component {
                 type: 'text',
                 value: this.state.newWassup,
                 placeholder: "What's up?",
-                onChange: (event) => {
+                onChange: event => {
                     console.log(event.target.value);
                     this.setState({newWassup : event.target.value})
+                }
+            }),
+            h('input', { 
+                type: 'text',
+                value: this.state.userName,
+                placeholder: "What's your name?",
+                onChange: event => {
+                    this.setState({userName : event.target.value})
                 }
             }),
             h('input', { type: 'submit', value: 'Go' })
