@@ -1,5 +1,7 @@
 const h = React.createElement;
 
+let generateId = () =>
+  Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString();
 
 // Dummy data initially populates WassupList.
 const initialPosts = [
@@ -35,7 +37,13 @@ class WassupForm extends React.Component {
         return h('form', {
             onSubmit: (event) => {
                 event.preventDefault();
-                console.log('SUBMITTED!');
+                let newPost = {
+                    id: generateId(),
+                    userName: 'Nat',
+                    date: new Date(),
+                    content: this.state.newWassup
+                }
+                this.props.makeWassup(newPost);
             }
         },
             h('input', { 
@@ -80,10 +88,20 @@ class Homepage extends React.Component {
             posts: props.data
         }
     };
+
     render() {
+
+        let makeWassup = newWassup => {
+            let newPosts = this.state.posts;
+            newPosts.push(newWassup);
+            this.setState({
+                posts: newPosts
+            })
+        };
+
         return h('main', {},
             h('h1', {}, 'Wassup!'),
-            h(WassupForm, {posts: this.state.posts}),
+            h(WassupForm, {posts: this.state.posts, makeWassup: makeWassup}),
             h(WassupList, {posts: this.state.posts}),
             h('footer', {}, 'Copyright 2018'),
         )
