@@ -4,19 +4,19 @@ const h = React.createElement;
 const initialPosts = [
     {
         id: 1,
-        userId: 1,
+        userName: 'Nat',
         date: 'August 5, 2018',
         content: 'Removed greater to do ability. You shy shall while but wrote marry.'
     },
     {
         id: 2,
-        userId: 1,
+        userName: 'Nat',
         date: 'August 22, 2018',
         content: 'Me burst ample wrong which would he could.'
     },
     {
         id: 3,
-        userId: 1,
+        userName: 'Nat',
         date: 'September 1, 2018',
         content: 'Questions we additions is extremely incommode.'
     },
@@ -26,15 +26,29 @@ const initialPosts = [
 let WassupForm = props => {
     return h('form', {}, [
         h('input', { placeholder: "What's up?" }),
-        h('button', {}, 'Post')
+        h('button', { type: 'submit' }, 'Post')
     ])
 }
 
 // Builds each post
-let WassupRow;
+let WassupRow = props => {
+    console.log(props)
+    return h('li', {}, [
+        h('h3', {}, props.post.userName + ' on ' + props.post.date),
+        h('p', {}, props.post.content)
+    ])
+};
 
 // Holds all old and new posts
-let WassupList
+let WassupList = props => {
+    return h('ul', {}, 
+        props.posts.map(post => 
+            h(WassupRow, {
+                post: post
+            })
+        )
+    );
+};
 
 // Builds page and keeps track of state
 class Homepage extends React.Component {
@@ -46,7 +60,9 @@ class Homepage extends React.Component {
     };
     render() {
         return h('main', {}, [
-            h(WassupForm, this.state.posts)
+            h('h1', {}, 'Wassup!'),
+            h(WassupForm, {posts: this.state.posts}),
+            h(WassupList, {posts: this.state.posts})
         ])
     }
 };
