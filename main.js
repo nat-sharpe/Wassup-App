@@ -4,26 +4,7 @@ let generateId = () =>
   Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString();
 
 // Dummy data initially populates WassupList.
-const initialPosts = [
-    {
-        id: 1,
-        userName: 'Nat',
-        date: 'August 5, 2018',
-        content: 'Removed greater to do ability. You shy shall while but wrote marry.'
-    },
-    {
-        id: 2,
-        userName: 'Nat',
-        date: 'August 22, 2018',
-        content: 'Me burst ample wrong which would he could.'
-    },
-    {
-        id: 3,
-        userName: 'Nat',
-        date: 'September 1, 2018',
-        content: 'Questions we additions is extremely incommode.'
-    },
-];
+const initialPosts = [];
 
 // Takes user input and sends data to Homepage
 class WassupForm extends React.Component {
@@ -44,6 +25,9 @@ class WassupForm extends React.Component {
                     content: this.state.newWassup
                 }
                 this.props.makeWassup(newPost);
+                this.setState({
+                    newWassup: ''
+                })
             }
         },
             h('input', { 
