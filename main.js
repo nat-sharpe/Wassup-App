@@ -1,5 +1,6 @@
 const h = React.createElement;
 
+
 // Dummy data initially populates WassupList.
 const initialPosts = [
     {
@@ -23,20 +24,40 @@ const initialPosts = [
 ];
 
 // Takes user input and sends data to Homepage
-let WassupForm = props => {
-    return h('form', {}, [
-        h('input', { placeholder: "What's up?" }),
-        h('button', { type: 'submit' }, 'Post')
-    ])
+class WassupForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            newWassup: ''
+        }
+    }
+    render () {
+        return h('form', {
+            onSubmit: (event) => {
+                event.preventDefault();
+                console.log('SUBMITTED!');
+            }
+        },
+            h('input', { 
+                type: 'text',
+                value: this.state.newWassup,
+                placeholder: "What's up?",
+                onChange: (event) => {
+                    console.log(event.target.value);
+                    this.setState({newWassup : event.target.value})
+                }
+            }),
+            h('input', { type: 'submit', value: 'Go' })
+        )
+    };
 }
 
 // Builds each post
 let WassupRow = props => {
-    console.log(props)
-    return h('li', {}, [
-        h('h3', {}, props.post.userName + ' on ' + props.post.date),
-        h('p', {}, props.post.content)
-    ])
+    return h('li', {},
+        h('h3', {}, props.post.content),
+        h('p', {}, props.post.userName + ' on ' + props.post.date),
+    )
 };
 
 // Holds all old and new posts
@@ -44,7 +65,8 @@ let WassupList = props => {
     return h('ul', {}, 
         props.posts.map(post => 
             h(WassupRow, {
-                post: post
+                post: post,
+                key: post.id
             })
         )
     );
@@ -59,11 +81,12 @@ class Homepage extends React.Component {
         }
     };
     render() {
-        return h('main', {}, [
+        return h('main', {},
             h('h1', {}, 'Wassup!'),
             h(WassupForm, {posts: this.state.posts}),
-            h(WassupList, {posts: this.state.posts})
-        ])
+            h(WassupList, {posts: this.state.posts}),
+            h('footer', {}, 'Copyright 2018'),
+        )
     }
 };
 
