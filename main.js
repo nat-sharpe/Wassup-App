@@ -1,5 +1,3 @@
-const h = React.createElement;
-
 let generateId = () =>
   Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString();
 
@@ -38,7 +36,7 @@ class WassupForm extends React.Component {
         return <form
             onSubmit={event => {
                 event.preventDefault();
-                if (this.state.newWassup !== '' && this.state.userName !== '') {
+                if (this.state.newWassup && this.state.userName) {
                     let newPost = {
                         id: generateId(),
                         userName: this.state.userName,
@@ -74,16 +72,16 @@ class WassupForm extends React.Component {
 }
 
 // Builds each post
-let WassupRow = props => {
-    return <li>
-            <h3>{ props.post.content }</h3>
-            <p>{ props.post.userName + ' on ' + props.post.date }</p>
-        </li>
-};
+let WassupRow = props => (
+    <li>
+        <h3>{ props.post.content }</h3>
+        <p>{ props.post.userName + ' on ' + props.post.date.toLocaleString() }</p>
+    </li>
+);
 
 // Holds all old and new posts
-let WassupList = props => {
-    return <ul>
+let WassupList = props => (
+    <ul>
         { props.posts.map(post => 
             <WassupRow 
                 post={post}
@@ -91,24 +89,22 @@ let WassupList = props => {
             />
         )}
     </ul>
-};
+);
 
 // Builds page and keeps track of state
 class Homepage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            posts: props.data
+            posts: props.posts
         }
     };
 
     render() {
 
         let makeWassup = newWassup => {
-            let newPosts = this.state.posts;
-            newPosts.unshift(newWassup);
             this.setState({
-                posts: newPosts
+                posts: [newWassup, ...this.state.posts]
             })
         };
 
@@ -121,4 +117,4 @@ class Homepage extends React.Component {
     }
 };
 
-ReactDOM.render(< Homepage data={initialPosts} />, document.querySelector('.react-root'));
+ReactDOM.render(< Homepage posts={initialPosts} />, document.querySelector('.react-root'));
