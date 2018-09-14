@@ -4,7 +4,26 @@ let generateId = () =>
   Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString();
 
 // Dummy data initially populates WassupList.
-const initialPosts = [];
+const initialPosts = [
+    {
+        id: 1,
+        userName: 'Matsuo Basho',
+        date: new Date(),
+        content: "An old silent pond... A frog jumps into the pond, splash! Silence again."
+    },
+    {
+        id: 2,
+        userName: 'Matsuo Basho',
+        date: new Date(),
+        content: "Autumn moonlight— a worm digs silently into the chestnut."
+    },
+    {
+        id: 3,
+        userName: 'Kobayashi Issa',
+        date: new Date(),
+        content: "Trusting the Buddha, good and bad, I bid farewell To the departing year."
+    },
+];
 
 // Takes user input and sends data to Homepage
 class WassupForm extends React.Component {
@@ -16,8 +35,8 @@ class WassupForm extends React.Component {
         }
     }
     render () {
-        return h('form', {
-            onSubmit: event => {
+        return <form
+            onSubmit={event => {
                 event.preventDefault();
                 if (this.state.newWassup !== '' && this.state.userName !== '') {
                     let newPost = {
@@ -32,47 +51,46 @@ class WassupForm extends React.Component {
                     })
                 }
             }
-        },
-            h('input', { 
-                type: 'text',
-                value: this.state.newWassup,
-                placeholder: "What's up?",
-                onChange: event => {
-                    console.log(event.target.value);
-                    this.setState({newWassup : event.target.value})
-                }
-            }),
-            h('input', { 
-                type: 'text',
-                value: this.state.userName,
-                placeholder: "What's your name?",
-                onChange: event => {
-                    this.setState({userName : event.target.value})
-                }
-            }),
-            h('input', { type: 'submit', value: 'Go' })
-        )
-    };
+        }>
+        <input
+            type="text"
+            value={this.state.newWassup}
+            placeholder="What's up?"
+            onChange={event => 
+                this.setState({newWassup : event.target.value})
+            }
+        />
+        <input 
+            type="text"
+            value={this.state.userName}
+            placeholder="What's your name?"
+            onChange={event => 
+                this.setState({userName : event.target.value})
+            }
+        />
+        <input type="submit" value="Go"/>
+    </form>
+    }
 }
 
 // Builds each post
 let WassupRow = props => {
-    return h('li', {},
-        h('h3', {}, props.post.content),
-        h('p', {}, props.post.userName + ' on ' + props.post.date),
-    )
+    return <li>
+            <h3>{ props.post.content }</h3>
+            <p>{ props.post.userName + ' on ' + props.post.date }</p>
+        </li>
 };
 
 // Holds all old and new posts
 let WassupList = props => {
-    return h('ul', {}, 
-        props.posts.map(post => 
-            h(WassupRow, {
-                post: post,
-                key: post.id
-            })
-        )
-    );
+    return <ul>
+        { props.posts.map(post => 
+            <WassupRow 
+                post={post}
+                key={post.id}
+            />
+        )}
+    </ul>
 };
 
 // Builds page and keeps track of state
@@ -94,13 +112,13 @@ class Homepage extends React.Component {
             })
         };
 
-        return h('main', {},
-            h('h1', {}, 'Wassup!'),
-            h(WassupForm, {posts: this.state.posts, makeWassup: makeWassup}),
-            h(WassupList, {posts: this.state.posts}),
-            h('footer', {}, 'Copyright 2018'),
-        )
+        return <main>
+            <h1>Wasssup?</h1>
+            <WassupForm posts={this.state.posts} makeWassup={makeWassup} />
+            <WassupList posts={this.state.posts} />
+            <footer>Copyright 2018</footer>
+        </main>
     }
 };
 
-ReactDOM.render(h(Homepage, { data: initialPosts }), document.querySelector('.react-root'));
+ReactDOM.render(< Homepage data={initialPosts} />, document.querySelector('.react-root'));
